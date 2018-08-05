@@ -1,8 +1,11 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
 # dependencies
-node_modules
+/node_modules
 
 # testing
 /coverage
+/ignore
 
 # production
 /build
@@ -13,6 +16,5 @@ node_modules
 .env.development.local
 .env.test.local
 .env.production.local
-ignore
 
 npm-debug.log*
