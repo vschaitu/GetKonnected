@@ -1,22 +1,41 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-// const mongoose = require("mongoose");
-// const routes = require("./routes");
-const app = express();
-const PORT = process.env.PORT || 8080;
+const express = require("express")
+const bodyParser = require("body-parser")
+const morgan = require('morgan')
+const session = require('express-session')
+const dbConnection = require('./database') 
+const MongoStore = require('connect-mongo')(session)
+const passport = require('./passport')
+const app = express()
+const PORT = process.env.PORT || 8080
 
 // Define middleware here
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan('dev'))
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// Sessions
+app.use(
+	session({
+		secret: 'mountain-lion', //pick a random string to make the hash that is generated secure
+		store: new MongoStore({ mongooseConnection: dbConnection }),
+		resave: false, //required
+		saveUninitialized: false //required
+	})
+)
+
+// Passport
+app.use(passport.initialize())
+
+// calls the deserializeUser
+app.use(passport.session()) 
+
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
-// // Add routes, both API and view
-// app.use(routes);
-
-// // Connect to the Mongo DB
-// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reactreadinglist");
+//routes
+const user = require('./routes/user')
+app.use('/user', user)
 
 // Start the API server
 app.listen(PORT, function() {
