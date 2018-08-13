@@ -106,7 +106,7 @@ router.get('/auth/twitter/callback',
 
     passport.authenticate('twitter'), (req, res) => {
 
-        return res.redirect('http://localhost:3000/');
+        return res.redirect("/");
 
     });
 

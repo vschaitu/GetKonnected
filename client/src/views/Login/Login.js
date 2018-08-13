@@ -155,7 +155,7 @@ class Login extends React.Component {
                                                 <div className={classes.socialLine}>
                                                     <Button
                                                         justIcon
-                                                        href="http://localhost:8080/user/twitter/login"
+                                                        href="/user/twitter/login"
                                                         color="transparent"
                                                     >
                                                         <i className={"fab fa-twitter"} />
