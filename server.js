@@ -37,14 +37,15 @@ app.use(passport.initialize())
 // calls the deserializeUser
 app.use(passport.session()) 
 
-// Serve up static assets (usually on heroku)
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
+
 //routes
 const user = require('./routes/user')
 app.use('/user', user)
 
+// Serve up static assets (usually on heroku)
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static("client/build"));
+}
 
 // Start the API server
 server.listen(PORT, function() {
