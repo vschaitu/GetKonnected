@@ -28,26 +28,42 @@ import InfoOutline from "@material-ui/icons/InfoOutlined";
 
 import image from '../../assets/img/login.jpeg'
 
-function TransitionUp(props) {
-    return <Slide {...props} direction="up" />;
-}
+// function TransitionUp(props) {
+//     return <Slide {...props} direction="up" />;
+// }
 
 class Login extends React.Component {
-    state = {
-        cardAnimaton: "cardHidden",
-        email: '',
-        password: '',
-        redirectTo: null
-    };
+
+    constructor(props) {
+
+        super(props);
+
+        this.state = {
+            cardAnimaton: "cardHidden",
+            email: '',
+            password: '',
+            authValid: null,
+            redirectToReferrer: false
+        };
+
+    }
 
     componentDidMount() {
-        // we add a hidden class to the card and after 700 ms we delete it and the transition appears
-        setTimeout(
-            function () {
-                this.setState({ cardAnimaton: "" });
-            }.bind(this),
-            700
-        );
+        this.props.objAuth.authenticate((res) => {
+            if (res.user) {
+                console.log("Yay user" , res.user)
+                this.setState({ redirectToReferrer: true })
+
+            } else {
+                console.log("no-user")
+                setTimeout(
+                    function () {
+                        this.setState({ cardAnimaton: "" });
+                    }.bind(this),
+                    400
+                );
+            }
+        })
     }
 
     handleChange = name => ({ target: { value } }) =>
@@ -57,13 +73,13 @@ class Login extends React.Component {
 
     handleSubmit() {
 
-        console.log('handleSubmit')
         const { email, password } = this.state
+        const { objAuth } = this.props
 
-        this.setState({ isAuthenticated: null })
-
+        this.setState({ authValid: null })
+        console.log("logging in")
         axios
-            .post('/user/login', {
+            .post('/user/local/login', {
                 'email': email,
                 'password': password
             })
@@ -71,37 +87,51 @@ class Login extends React.Component {
                 console.log('login response: ')
                 console.log(response)
                 if (response.status === 200) {
-                    // update App.js state
-                    // this.props.updateUser({
-                    //     loggedIn: true,
-                    //     username: response.data.username
-                    // })
-                    // update the state to redirect to home
-                    // this.setState({
-                    //     redirectTo: '/'
-                    // })
-                    this.setState({ isAuthenticated: true })
-                    setTimeout(
-                        function () {
-                            this.setState({ redirectTo: '/' });
-                        }.bind(this),
-                        1000
-                    );
+                    console.log("calling autheticate again after post")
+                    objAuth.authenticate((obj) => {
+                        console.log('obj in loin', obj)
+                        if (obj.user.local) {
+                            this.setState({ authValid: true })
+                            setTimeout(
+                                function () {
+                                    this.setState({ redirectToReferrer: true });
+                                }.bind(this),
+                                1000
+                            );
+                        }
+                    })
                 }
             })
             .catch(error => {
                 console.log('login error: ')
                 console.log(error.response);
-                this.setState({ isAuthenticated: false })
+                this.setState({ authValid: false })
+            })
+    }
+
+    handleGooglelogin() {
+
+        console.log("leaveing to google site....")
+
+        axios
+            .post('/user/google/login', {})
+            .then(response => {
+                console.log('Will i ever comeback?')
+            })
+            .catch(error => {
+                console.log('something wrong with google login error ')
+                console.log(error);
             })
     }
 
     render() {
+
         const { classes } = this.props
-        const { email, password } = this.state
-        console.log(this.props)
-        if (this.state.redirectTo) {
-            return <Redirect to={{ pathname: this.state.redirectTo }} />
+        const { email, password, redirectToReferrer } = this.state
+        const { from } = this.props.location.state || { from: { pathname: "/" } };
+
+        if (this.state.redirectToReferrer) {
+            return <Redirect to={from} />
         } else {
             return (
                 <React.Fragment>
@@ -143,10 +173,9 @@ class Login extends React.Component {
                                                     </Button>
                                                     <Button
                                                         justIcon
-                                                        href="#pablo"
                                                         target="_blank"
                                                         color="transparent"
-                                                        onClick={e => e.preventDefault()}
+                                                        onClick={() => this.handleGooglelogin()}
                                                     >
                                                         <i className={"fab fa-google-plus-g"} />
                                                     </Button>
@@ -197,16 +226,17 @@ class Login extends React.Component {
                                                 <Button
                                                     round
                                                     color="primary"
-                                                    size="md"
+                                                    size="sm"
+                                                    disabled={!(Boolean(email.length > 2 && password.length > 2 ))}
                                                     onClick={() => this.handleSubmit()}
                                                 >
                                                     Get started
                                                 </Button>
-                                                 OR 
+                                                OR
                                                 <Button
                                                     round
                                                     color="info"
-                                                    size="md"
+                                                    size="sm"
                                                     href="/signup"
                                                 >
                                                     Register
@@ -218,7 +248,7 @@ class Login extends React.Component {
                             </GridContainer>
                         </div>
                         <div className={classes.container}>
-                            {this.state.isAuthenticated === true &&
+                            {this.state.authValid === true &&
                                 <SnackbarContent
                                     message={
                                         <span>
@@ -229,10 +259,10 @@ class Login extends React.Component {
                                     color="success"
                                     icon={InfoOutline}
                                     vertical="bottom"
-                                    TransitionComponent={TransitionUp}
+                                // TransitionComponent={TransitionUp}
                                 />
                             }
-                            {this.state.isAuthenticated === false &&
+                            {this.state.authValid === false &&
                                 <SnackbarContent
                                     message={
                                         <span>
@@ -241,7 +271,7 @@ class Login extends React.Component {
                                     }
                                     close
                                     color="danger"
-                                    TransitionComponent={TransitionUp}
+                                    // TransitionComponent={TransitionUp}
                                     icon={InfoOutline}
                                     vertical="bottom"
                                 />

@@ -1,6 +1,5 @@
 import React from "react";
 import { Redirect } from 'react-router-dom';
-import axios from 'axios';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -19,89 +18,67 @@ import Eject from "@material-ui/icons/Eject";
 
 class Home extends React.Component {
 
+    // constructor (props) {
+    //     super(props)
+    // }
     state = {
-        redirectTo: null,
-        loggedIn: false,
-        user: null
-    };
+        redirectTo : null
+    }
+    signout = () => {
+        this.props.objAuth.logout()
+        this.setState({ redirectTo: '/login' });
+    }
 
     componentDidMount() {
-        this.getUser()
-    }
-
-    getUser() {
-        axios.get('/user/').then(response => {
-            console.log('Get user response: ')
-            console.log(response.data)
-            if (response.data.user) {
-                console.log('Get User: There is a user saved in the server session: ')
-                this.setState({
-                    loggedIn: true,
-                    user: response.data.user
-                })
-            } else {
-                console.log('Get user: no user');
-                this.setState({
-                    loggedIn: false,
-                    user: null ,
-                    redirectTo: '/login'
-                })
-            }
-        })
-    }
-
-    logout() {
-        console.log('logging out')
-        axios.post('/user/logout')
-        .then(response => {
-          console.log(response.data)
-          if (response.status === 200) {
-            this.setState({
-              loggedIn: false,
-              username: null,
-              redirectTo: '/login'
-            })
-          }
-        })
-        .catch(error => {
-            console.log('Logout error')
-            console.log(error)
-        })
+        this.setState({ redirectTo: null });
     }
 
     render() {
 
+        console.log(this.props)
+
+        let username
+
+        if (this.props.objAuth.user.local.username) {
+            username = this.props.objAuth.user.local.username
+        }
+
         const { classes } = this.props
+
 
         if (this.state.redirectTo) {
             return <Redirect to={{ pathname: this.state.redirectTo }} />
-        } else {
-            return (
-                <React.Fragment>
-                    <CssBaseline />
-                    <div className={classes.container}>
-                        <GridContainer>
-                            <GridItem xs={12} sm={4} md={3} xl={3}>
-                                <Header
-                                    brand={this.state.user ? this.state.user.email : "Who are you?"}
-                                    color="info"
-                                    rightLinks={
-                                        <List className={classes.list}>
-                                            <ListItem className={classes.listItem}>
-                                                <Button color="transparent" className={classes.navLink} onClick={() => this.logout()}>
-                                                    <Eject className={classes.icons} />
-                                                </Button>
-                                            </ListItem>
-                                        </List>
-                                    }
-                                />
-                            </GridItem>
-                        </GridContainer>
-                    </div>
-                </React.Fragment>
-            )
         }
+        return (
+            <React.Fragment>
+                <CssBaseline />
+                <div className={classes.container}>
+                    <GridContainer>
+                        <GridItem>
+                            <Header
+                                brand={username}
+                                color="info"
+                                rightLinks={
+                                    <List className={classes.list}>
+                                        <ListItem className={classes.listItem}>
+                                            <Button color="transparent" className={classes.navLink} onClick={this.signout}>
+                                                <Eject className={classes.icons} />
+                                            </Button>
+                                        </ListItem>
+                                    </List>
+                                }
+                            />
+                        </GridItem>
+                    </GridContainer>
+                </div>
+            </React.Fragment>
+        )
     }
 }
 
 export default withStyles(homeStyle)(Home);
+
+
+// import React from "react";
+// const Home = () => <h3>Protected</h3>;
+// export default Home;
