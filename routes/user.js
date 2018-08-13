@@ -77,7 +77,7 @@ router.post('/logout', (req, res) => {
 
 
 // send to google to do the authentication
-router.get('/google/login', passport.authorize('google', { scope: ['profile', 'email'] }));
+router.post('/google/login', passport.authorize('google', { scope: ['profile', 'email'] }));
 
 // the callback after google has authorized the user
 router.get('/auth/google/callback',
