@@ -109,20 +109,20 @@ class Login extends React.Component {
             })
     }
 
-    handleGooglelogin() {
+    // handleGooglelogin() {
 
-        console.log("leaveing to google site....")
+    //     console.log("leaveing to google site....")
 
-        axios
-            .post('/user/google/login', {})
-            .then(response => {
-                console.log('Will i ever comeback?')
-            })
-            .catch(error => {
-                console.log('something wrong with google login error ')
-                console.log(error);
-            })
-    }
+    //     axios
+    //         .post('/user/google/login', {})
+    //         .then(response => {
+    //             console.log('Will i ever comeback?')
+    //         })
+    //         .catch(error => {
+    //             console.log('something wrong with google login error ')
+    //             console.log(error);
+    //         })
+    // }
 
     render() {
 
@@ -155,10 +155,8 @@ class Login extends React.Component {
                                                 <div className={classes.socialLine}>
                                                     <Button
                                                         justIcon
-                                                        href="#pablo"
-                                                        target="_blank"
+                                                        href="http://localhost:8080/user/twitter/login"
                                                         color="transparent"
-                                                        onClick={e => e.preventDefault()}
                                                     >
                                                         <i className={"fab fa-twitter"} />
                                                     </Button>
@@ -173,9 +171,8 @@ class Login extends React.Component {
                                                     </Button>
                                                     <Button
                                                         justIcon
-                                                        target="_blank"
                                                         color="transparent"
-                                                        onClick={() => this.handleGooglelogin()}
+                                                        href="http://localhost:8080/user/google/login"
                                                     >
                                                         <i className={"fab fa-google-plus-g"} />
                                                     </Button>

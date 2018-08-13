@@ -77,13 +77,48 @@ router.post('/logout', (req, res) => {
 
 
 // send to google to do the authentication
-router.post('/google/login', passport.authorize('google', { scope: ['profile', 'email'] }));
+router.get('/google/login', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 // the callback after google has authorized the user
+// router.get('/auth/google/callback',
+
+//     passport.authorize('google'), (req, res, next) => {
+//         console.log(req.)
+//         req.login(req.user, function (err) {
+//             if (err) { return next(err); }
+//             return res.redirect('http://localhost:3000/');
+//         });
+//     })
+
 router.get('/auth/google/callback',
-    passport.authorize('google', {
-        successRedirect: '/',
-        failureRedirect: '/login'
-    }));
+
+    passport.authenticate('google'), (req, res) => {
+
+        return res.redirect('http://localhost:3000/');
+
+    });
+
+// send to twitter to do the authentication
+router.get('/twitter/login', passport.authenticate('twitter', { scope: 'email' }));
+
+// handle the callback after twitter has authenticated the user
+router.get('/auth/twitter/callback',
+
+    passport.authenticate('twitter'), (req, res) => {
+
+        return res.redirect('http://localhost:3000/');
+
+    });
+
+// app.get('/login', function(req, res, next) {
+//   passport.authenticate('local', function(err, user, info) {
+//     if (err) { return next(err); }
+//     if (!user) { return res.redirect('/login'); }
+//     req.logIn(user, function(err) {
+//       if (err) { return next(err); }
+//       return res.redirect('/users/' + user.username);
+//     });
+//   })(req, res, next);
+// });
 
 module.exports = router

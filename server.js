@@ -28,6 +28,9 @@ app.use(
 	})
 )
 
+var cors = require('cors');
+app.use(cors())
+
 // Passport
 app.use(passport.initialize())
 
@@ -41,6 +44,7 @@ if (process.env.NODE_ENV === "production") {
 //routes
 const user = require('./routes/user')
 app.use('/user', user)
+
 
 // Start the API server
 server.listen(PORT, function() {

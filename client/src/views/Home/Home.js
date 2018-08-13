@@ -39,8 +39,12 @@ class Home extends React.Component {
 
         let username
 
-        if (this.props.objAuth.user.local.username) {
+        if (this.props.objAuth.user.local !== undefined) {
             username = this.props.objAuth.user.local.username
+        } else if (this.props.objAuth.user.google !== undefined) {
+            username = this.props.objAuth.user.google.name
+        } else if (this.props.objAuth.user.twitter !== undefined) {
+            username = this.props.objAuth.user.twitter.displayName
         }
 
         const { classes } = this.props
