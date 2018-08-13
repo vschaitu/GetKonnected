@@ -10,7 +10,7 @@ module.exports = {
     'twitterAuth' : {
         'consumerKey'        : 'cMBZ8PZvzQOC74n9KIIEyd0SC',
         'consumerSecret'     : 'STxJrvovkUbMNg4PaSWGq7yFJGU100b6UifUsLAeLLdbf5eqpn',
-        'callbackURL'        : 'http://localhost:8080/auth/twitter/callback'
+        'callbackURL'        : 'https://obscure-basin-14975.herokuapp.com/user/auth/twitter/callback'
     }
 
 };
