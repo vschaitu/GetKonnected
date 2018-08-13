@@ -3,12 +3,12 @@ const router = express.Router()
 const User = require('../database/models/user')
 const passport = require('../passport')
 
-router.post('/', (req, res) => {
-    console.log('user signup',req.body.user);
+router.post('/local', (req, res) => {
+    console.log('local user signup', req.body.user);
 
-    const { email, password, fname, lname } = req.body.user
+    const { email, password, username } = req.body.user
     // ADD VALIDATION
-    User.findOne({ email: email }, (err, user) => {
+    User.findOne({ 'local.email': email }, (err, user) => {
         if (err) {
             console.log('User.js post error: ', err)
         } else if (user) {
@@ -17,14 +17,20 @@ router.post('/', (req, res) => {
             })
         }
         else {
-            const newUser = new User({
-                email: email,
-                password: password,
-                fname: fname,
-                lname: lname
-            })
+            const newUser = new User()
+
+            newUser.local.email = email
+            newUser.local.password = password
+            newUser.local.username = username
+
+            console.log(newUser)
+
             newUser.save((err, savedUser) => {
-                if (err) return res.json(err)
+                if (err) {
+                    console.log(err)
+                    return res.json(err)
+                }
+                console.log(savedUser)
                 res.json(savedUser)
             })
         }
@@ -32,7 +38,7 @@ router.post('/', (req, res) => {
 })
 
 router.post(
-    '/login',
+    '/local/login',
     function (req, res, next) {
         console.log('req.body:');
         console.log(req.body)
@@ -54,17 +60,30 @@ router.get('/', (req, res, next) => {
     if (req.user) {
         res.json({ user: req.user })
     } else {
-        res.json({ user: null })
+        res.json({})
     }
 })
 
 router.post('/logout', (req, res) => {
     if (req.user) {
         req.logout()
+        console.log("loggin user out on Server")
         res.send({ msg: 'logging out' })
+
     } else {
         res.send({ msg: 'no user to log out' })
     }
 })
+
+
+// send to google to do the authentication
+router.get('/google/login', passport.authorize('google', { scope: ['profile', 'email'] }));
+
+// the callback after google has authorized the user
+router.get('/auth/google/callback',
+    passport.authorize('google', {
+        successRedirect: '/',
+        failureRedirect: '/login'
+    }));
 
 module.exports = router

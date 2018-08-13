@@ -7,6 +7,11 @@ const MongoStore = require('connect-mongo')(session)
 const passport = require('./passport')
 const app = express()
 const PORT = process.env.PORT || 8080
+const server = require('http').Server(app)
+const io = module.exports.io = require('socket.io')(server)
+const SocketManager = require('./SocketManager')
+
+io.on('connection', SocketManager)
 
 // Define middleware here
 app.use(morgan('dev'))
@@ -38,6 +43,6 @@ const user = require('./routes/user')
 app.use('/user', user)
 
 // Start the API server
-app.listen(PORT, function() {
+server.listen(PORT, function() {
   console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
 });

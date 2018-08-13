@@ -30,8 +30,7 @@ class Signup extends Component {
         cardAnimaton: 'cardHidden',
         user: {
             email: '',
-            fname: '',
-            lname: '',
+            username: '',
             password: ''
         },
         redirectTo: null
@@ -46,10 +45,10 @@ class Signup extends Component {
     handleSubmit() {
 
         const { user } = this.state
-
+        console.log("sending post ot create user")
         //request to server to add a new username/password
         axios
-            .post('/user/', { user })
+            .post('/user/local', { user })
             .then(response => {
                 console.log(response)
                 if (!response.data.errors && !response.data.error) {
@@ -57,9 +56,9 @@ class Signup extends Component {
                     this.setState({ //redirect to login page
                         redirectTo: '/login'
                     })
-                } else if(response.data.error) {
+                } else if (response.data.error) {
                     console.log('username already taken')
-                } 
+                }
                 else {
                     console.log('Invalid entry')
                 }
@@ -81,8 +80,9 @@ class Signup extends Component {
     }
 
     render() {
-        const { classes, ...rest } = this.props
-        const { fname, lname, email, password } = this.state.user
+        const { classes } = this.props
+        const { username, email, password } = this.state.user
+        console.log(() => this.state.email.length > 5)
         if (this.state.redirectTo) {
             return <Redirect to={{ pathname: this.state.redirectTo }} />
         } else {
@@ -105,40 +105,22 @@ class Signup extends Component {
                                             <Typography variant="title" color="inherit">
                                                 Get Konnected
                                             </Typography>
-                                            <br/>
+                                            <br />
                                         </CardHeader>
                                         <form className={classes.form}>
                                             <CardBody>
                                                 <CustomInput
-                                                    labelText="First Name..."
-                                                    id="fname"
-                                                    label="Fname"
-                                                    value={fname}
+                                                    labelText="display Name..."
+                                                    id="username"
+                                                    label="username"
+                                                    value={username}
 
                                                     formControlProps={{
                                                         fullWidth: true
                                                     }}
                                                     inputProps={{
                                                         type: "text",
-                                                        onChange: this.handleChange('fname'),
-                                                        endAdornment: (
-                                                            <InputAdornment position="end">
-                                                                <People className={classes.inputIconsColor} />
-                                                            </InputAdornment>
-                                                        )
-                                                    }}
-                                                />
-                                                <CustomInput
-                                                    labelText="Last Name..."
-                                                    id="lname"
-                                                    label="Lname"
-                                                    value={lname}
-                                                    formControlProps={{
-                                                        fullWidth: true
-                                                    }}
-                                                    inputProps={{
-                                                        type: "text",
-                                                        onChange: this.handleChange('lname'),
+                                                        onChange: this.handleChange('username'),
                                                         endAdornment: (
                                                             <InputAdornment position="end">
                                                                 <People className={classes.inputIconsColor} />
@@ -190,6 +172,7 @@ class Signup extends Component {
                                                 <Button
                                                     round
                                                     color="primary"
+                                                    disabled={!(Boolean(username.length > 2 && password.length > 2 && email.length > 2))}
                                                     size="lg"
                                                     onClick={() => this.handleSubmit()}
                                                 >
