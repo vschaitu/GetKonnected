@@ -8,11 +8,7 @@ const passport = require('./passport')
 const routes = require("./routes");
 const app = express()
 const PORT = process.env.PORT || 8080
-const server = require('http').Server(app)
-const io = module.exports.io = require('socket.io')(server)
-const SocketManager = require('./SocketManager')
 
-io.on('connection', SocketManager)
 
 // Define middleware here
 app.use(morgan('dev'))
@@ -45,6 +41,11 @@ if (process.env.NODE_ENV === "production") {
 
 //routes
 app.use(routes)
+
+const server = require('http').Server(app)
+const io = module.exports.io = require('socket.io')(server)
+const SocketManager = require('./SocketManager')
+io.on('connection', SocketManager)
 
 // Start the API server
 server.listen(PORT, function () {
