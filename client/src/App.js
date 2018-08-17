@@ -21,7 +21,7 @@ const objAuth = {
   chatUser: null,
   login(cb) {
     console.log('Authenticating user: ')
-    axios.get('/user/')
+    axios.get('/api/user/')
       .then(response => {
         console.log(response)
         if (response.data.user) {
@@ -54,7 +54,7 @@ const objAuth = {
   },
   logout(cb) {
     console.log('logging out')
-    axios.post('/user/logout')
+    axios.post('/api/user/logout')
       .then(response => {
         console.log(response.data)
         if (response.status === 200) {

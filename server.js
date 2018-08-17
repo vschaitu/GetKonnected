@@ -5,6 +5,7 @@ const session = require('express-session')
 const dbConnection = require('./database')
 const MongoStore = require('connect-mongo')(session)
 const passport = require('./passport')
+const routes = require("./routes");
 const app = express()
 const PORT = process.env.PORT || 8080
 const server = require('http').Server(app)
@@ -28,8 +29,8 @@ app.use(
 	})
 )
 
-var cors = require('cors');
-app.use(cors())
+// var cors = require('cors');
+// app.use(cors())
 
 // Passport
 app.use(passport.initialize())
@@ -37,21 +38,13 @@ app.use(passport.initialize())
 // calls the deserializeUser
 app.use(passport.session())
 
-
-//routes
-const user = require('./routes/user')
-app.use('/user', user)
-
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
 	app.use(express.static("client/build"));
 }
 
-// Send every request to the React app
-// Define any API routes before this runs
-app.get("*", function (req, res) {
-	res.sendFile(path.join(__dirname, "./client/build/index.html"));
-});
+//routes
+app.use(routes)
 
 // Start the API server
 server.listen(PORT, function () {

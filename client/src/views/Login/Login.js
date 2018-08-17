@@ -95,7 +95,7 @@ class Login extends React.Component {
         this.setState({ authValid: null })
         console.log("logging in")
         axios
-            .post('/user/local/login', {
+            .post('/api/user/local/login', {
                 'email': email,
                 'password': password
             })
@@ -160,7 +160,7 @@ class Login extends React.Component {
                                                 <div className={classes.socialLine}>
                                                     <Button
                                                         justIcon
-                                                        href="/user/twitter/login"
+                                                        href="/api/user/twitter/login"
                                                         color="transparent"
                                                     >
                                                         <i className={"fab fa-twitter"} />
@@ -177,7 +177,7 @@ class Login extends React.Component {
                                                     <Button
                                                         justIcon
                                                         color="transparent"
-                                                        href="http://localhost:8080/user/google/login"
+                                                        href="http://localhost:8080/api/user/google/login"
                                                     >
                                                         <i className={"fab fa-google-plus-g"} />
                                                     </Button>
