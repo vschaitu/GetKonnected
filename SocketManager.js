@@ -55,7 +55,6 @@ module.exports = function(socket){
 		connectedUsers = removeUser(connectedUsers, socket.user.name)
 		io.emit(USER_DISCONNECTED, connectedUsers)
 		console.log("Disconnect", connectedUsers);
-
 	})
 
 	//Get Community Chat

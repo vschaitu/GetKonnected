@@ -43,25 +43,42 @@ class Login extends React.Component {
             email: '',
             password: '',
             authValid: null,
+            errorMessage: null,
             redirectToReferrer: false
         };
 
     }
 
     componentDidMount() {
-        this.props.objAuth.authenticate((res) => {
-            if (res.user) {
-                console.log("Yay user" , res.user)
-                this.setState({ redirectToReferrer: true })
+        this.validateUser()
+    }
 
+    validateUser() {
+
+        const {objAuth} = this.props
+
+        objAuth.login((isAuthenticated, isUserAlreadyinChat, chatUser, res) => {
+            
+            if (!isUserAlreadyinChat) {
+                if (res.user) {
+                    console.log("Yay user", res.user)
+                    this.setState({ redirectToReferrer: true })
+
+                } else {
+                    console.log("no-user")
+                    setTimeout(
+                        function () {
+                            this.setState({ cardAnimaton: "" });
+                        }.bind(this),
+                        400
+                    );
+                }
             } else {
-                console.log("no-user")
-                setTimeout(
-                    function () {
-                        this.setState({ cardAnimaton: "" });
-                    }.bind(this),
-                    400
-                );
+                console.log("user already have got session")
+                this.setState({
+                    authValid: false,
+                    errorMessage: "User already have active session! Can't login!"
+                })
             }
         })
     }
@@ -74,7 +91,6 @@ class Login extends React.Component {
     handleSubmit() {
 
         const { email, password } = this.state
-        const { objAuth } = this.props
 
         this.setState({ authValid: null })
         console.log("logging in")
@@ -88,18 +104,7 @@ class Login extends React.Component {
                 console.log(response)
                 if (response.status === 200) {
                     console.log("calling autheticate again after post")
-                    objAuth.authenticate((obj) => {
-                        console.log('obj in loin', obj)
-                        if (obj.user.local) {
-                            this.setState({ authValid: true })
-                            setTimeout(
-                                function () {
-                                    this.setState({ redirectToReferrer: true });
-                                }.bind(this),
-                                1000
-                            );
-                        }
-                    })
+                    this.validateUser()
                 }
             })
             .catch(error => {
@@ -224,7 +229,7 @@ class Login extends React.Component {
                                                     round
                                                     color="primary"
                                                     size="sm"
-                                                    disabled={!(Boolean(email.length > 2 && password.length > 2 ))}
+                                                    disabled={!(Boolean(email.length > 2 && password.length > 2))}
                                                     onClick={() => this.handleSubmit()}
                                                 >
                                                     Get started
@@ -263,7 +268,7 @@ class Login extends React.Component {
                                 <SnackbarContent
                                     message={
                                         <span>
-                                            <b>Waring:</b> Invalid credentials...
+                                            <b>Waring:</b> {this.state.errorMessage}
                                         </span>
                                     }
                                     close

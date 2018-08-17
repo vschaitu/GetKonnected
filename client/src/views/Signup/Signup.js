@@ -110,7 +110,7 @@ class Signup extends Component {
                                         <form className={classes.form}>
                                             <CardBody>
                                                 <CustomInput
-                                                    labelText="display Name..."
+                                                    labelText="Display Name..."
                                                     id="username"
                                                     label="username"
                                                     value={username}

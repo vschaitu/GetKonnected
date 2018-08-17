@@ -16,6 +16,8 @@ import Header from "../../components/Header/Header.jsx";
 
 import Eject from "@material-ui/icons/Eject";
 
+
+
 class Home extends React.Component {
 
     // constructor (props) {
@@ -36,6 +38,7 @@ class Home extends React.Component {
     render() {
 
         console.log(this.props)
+    
 
         let username
 
