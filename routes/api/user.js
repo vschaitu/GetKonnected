@@ -94,7 +94,7 @@ router.get('/auth/google/callback',
 
     passport.authenticate('google'), (req, res) => {
 
-        return res.redirect('http://localhost:3000/');
+        return res.redirect('/');
 
     });
 

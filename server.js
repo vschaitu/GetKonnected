@@ -7,12 +7,15 @@ const MongoStore = require('connect-mongo')(session)
 const passport = require('./passport')
 const routes = require("./routes");
 const app = express()
+const server = require('http').Server(app)
+const io = module.exports.io = require('socket.io')(server)
+const SocketManager = require('./SocketManager')
 const PORT = process.env.PORT || 8080
 
 
 // Define middleware here
 app.use(morgan('dev'))
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Sessions
@@ -34,6 +37,8 @@ app.use(passport.initialize())
 // calls the deserializeUser
 app.use(passport.session())
 
+
+
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
 	app.use(express.static("client/build"));
@@ -42,10 +47,9 @@ if (process.env.NODE_ENV === "production") {
 //routes
 app.use(routes)
 
-const server = require('http').Server(app)
-const io = module.exports.io = require('socket.io')(server)
-const SocketManager = require('./SocketManager')
 io.on('connection', SocketManager)
+
+
 
 // Start the API server
 server.listen(PORT, function () {

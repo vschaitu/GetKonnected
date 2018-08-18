@@ -177,7 +177,7 @@ class Login extends React.Component {
                                                     <Button
                                                         justIcon
                                                         color="transparent"
-                                                        href="http://localhost:8080/api/user/google/login"
+                                                        href="/api/user/google/login"
                                                     >
                                                         <i className={"fab fa-google-plus-g"} />
                                                     </Button>
