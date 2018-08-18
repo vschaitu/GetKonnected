@@ -8,8 +8,8 @@ module.exports = {
     },
 
     'twitterAuth' : {
-        'consumerKey'        : 'cMBZ8PZvzQOC74n9KIIEyd0SC',
-        'consumerSecret'     : 'STxJrvovkUbMNg4PaSWGq7yFJGU100b6UifUsLAeLLdbf5eqpn',
+        'consumerKey'        : 'EmkP37hUDfu40NqAxNMjr06aK',
+        'consumerSecret'     : 'bksKIUjDdBMeApWKzyAKppiFKwnfRDdSjX9BM6YwgbNmxuLRkh',
         'callbackURL'        : 'https://obscure-basin-14975.herokuapp.com/api/user/auth/twitter/callback'
     }
 
