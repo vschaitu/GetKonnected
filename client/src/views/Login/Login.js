@@ -167,10 +167,8 @@ class Login extends React.Component {
                                                     </Button>
                                                     <Button
                                                         justIcon
-                                                        href="#pablo"
-                                                        target="_blank"
+                                                        href="/api/user/facebook/login"
                                                         color="transparent"
-                                                        onClick={e => e.preventDefault()}
                                                     >
                                                         <i className={"fab fa-facebook"} />
                                                     </Button>

@@ -2,6 +2,7 @@ const passport = require('passport')
 const LocalStrategy = require('./localStrategy')
 const GoogleStrategy = require('./googleStrategy')
 const TwitterStrategy = require('./twitterStrategy')
+const FacebookStrategy = require('./facebookStrategy')
 const User = require('../database/models/user')
 
 
@@ -31,5 +32,6 @@ passport.deserializeUser((id, done) => {
 passport.use(LocalStrategy)
 passport.use(GoogleStrategy)
 passport.use(TwitterStrategy)
+passport.use(FacebookStrategy)
 
 module.exports = passport

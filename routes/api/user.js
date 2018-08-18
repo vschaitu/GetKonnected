@@ -108,7 +108,22 @@ router.get('/auth/twitter/callback',
 
         return res.redirect("/");
 
-    });
+    }
+);
+
+
+// send to twitter to do the authentication
+router.get('/facebook/login', passport.authenticate('facebook', { scope : ['public_profile', 'email'] }));
+
+// handle the callback after twitter has authenticated the user
+router.get('/auth/facebook/callback',
+
+    passport.authenticate('facebook'), (req, res) => {
+
+        return res.redirect("/");
+
+    }
+);
 
 // app.get('/login', function(req, res, next) {
 //   passport.authenticate('local', function(err, user, info) {

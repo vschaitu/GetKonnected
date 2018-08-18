@@ -22,6 +22,12 @@ const userSchema = new Schema({
         token        : String,
         displayName  : String,
         username     : String
+	},
+	facebook         : {
+        id           : String,
+        token        : String,
+        name         : String,
+        email        : String
     }
 })
 
