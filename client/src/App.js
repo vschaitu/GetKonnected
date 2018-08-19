@@ -11,7 +11,7 @@ import axios from 'axios';
 import io from 'socket.io-client'
 import { USER_CONNECTED, LOGOUT, VERIFY_USER } from './Events'
 
-const socketUrl = "http://localhost:8080" || process.env.REACT_APP_URL_VAR
+const socketUrl = "/" 
 
 const objAuth = {
   socket: io(socketUrl),
