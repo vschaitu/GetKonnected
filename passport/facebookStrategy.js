@@ -59,24 +59,7 @@ function(req, token, refreshToken, profile, done) {
                     });
                 }
             });
-
-        } else {
-            // user already exists and is logged in, we have to link accounts
-            var user            = req.user; // pull the user out of the session
-
-            user.facebook.id    = profile.id;
-            user.facebook.token = token;
-            user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
-            user.facebook.email = (profile.emails[0].value || '').toLowerCase();
-
-            user.save(function(err) {
-                if (err)
-                    return done(err);
-                    
-                return done(null, user);
-            });
-
-        }
+        } 
     });
 })
 

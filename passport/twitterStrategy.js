@@ -57,22 +57,7 @@ function(req, token, tokenSecret, profile, done) {
                 }
             });
 
-        } else {
-            // user already exists and is logged in, we have to link accounts
-            var user                 = req.user; // pull the user out of the session
-
-            user.twitter.id          = profile.id;
-            user.twitter.token       = token;
-            user.twitter.username    = profile.username;
-            user.twitter.displayName = profile.displayName;
-
-            user.save(function(err) {
-                if (err)
-                    return done(err);
-                    
-                return done(null, user);
-            });
-        }
+        } 
 
     })
 })
