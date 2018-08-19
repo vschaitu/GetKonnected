@@ -55,10 +55,10 @@ class Login extends React.Component {
 
     validateUser() {
 
-        const {objAuth} = this.props
+        const { objAuth } = this.props
 
         objAuth.login((isAuthenticated, isUserAlreadyinChat, chatUser, res) => {
-            
+
             if (!isUserAlreadyinChat) {
                 if (res.user) {
                     console.log("Yay user", res.user)
@@ -110,7 +110,10 @@ class Login extends React.Component {
             .catch(error => {
                 console.log('login error: ')
                 console.log(error.response);
-                this.setState({ authValid: false })
+                this.setState({
+                    authValid: false,
+                    errorMessage: "Invalid Credentials!"
+                })
             })
     }
 

@@ -7,9 +7,9 @@ const strategy = new FacebookStrategy({
 
     clientID: configAuth.facebookAuth.clientID,
     clientSecret: configAuth.facebookAuth.clientSecret,
-    callbackURL: configAuth.facebookAuth.callbackURL,
-    profileURL: configAuth.facebookAuth.profileURL,
-    profileFields: configAuth.facebookAuth.profileFields
+    callbackURL: configAuth.facebookAuth.callbackURL
+    // profileURL: configAuth.facebookAuth.profileURL,
+    // profileFields: configAuth.facebookAuth.profileFields
 
 },
 function(req, token, refreshToken, profile, done) {
@@ -17,6 +17,7 @@ function(req, token, refreshToken, profile, done) {
     // asynchronous
     process.nextTick(function() {
 
+        console.log("Facebook auth entry point!",profile)
         // check if the user is already logged in
         if (!req.user) {
 

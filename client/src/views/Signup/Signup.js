@@ -48,7 +48,7 @@ class Signup extends Component {
         console.log("sending post ot create user")
         //request to server to add a new username/password
         axios
-            .post('/user/local', { user })
+            .post('/api/user/local', { user })
             .then(response => {
                 console.log(response)
                 if (!response.data.errors && !response.data.error) {

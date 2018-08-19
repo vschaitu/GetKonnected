@@ -113,7 +113,7 @@ router.get('/auth/twitter/callback',
 
 
 // send to twitter to do the authentication
-router.get('/facebook/login', passport.authenticate('facebook', { scope : ['public_profile', 'email'] }));
+router.get('/facebook/login', passport.authenticate('facebook', { scope : ['email'] }));
 
 // handle the callback after twitter has authenticated the user
 router.get('/auth/facebook/callback',
