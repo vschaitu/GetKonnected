@@ -12,12 +12,12 @@ const strategy = new FacebookStrategy({
     profileFields: configAuth.facebookAuth.profileFields
 
 },
-function(req, token, refreshToken, profile, done) {
+function(req, accessToken, refreshToken, profile, done) {
 
     // asynchronous
     process.nextTick(function() {
 
-
+        console.log("fb token: ",accessToken)
         // check if the user is already logged in
         if (!req.user) {
 
@@ -29,7 +29,7 @@ function(req, token, refreshToken, profile, done) {
 
                     // if there is a user id already but no token (user was linked at one point and then removed)
                     if (!user.facebook.token) {
-                        user.facebook.token = token;
+                        user.facebook.token = accessToken;
                         user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                         user.facebook.email = (profile.emails[0].value || '').toLowerCase();
 
@@ -37,7 +37,7 @@ function(req, token, refreshToken, profile, done) {
                             if (err)
                                 return done(err);
                                 
-                            return done(null, user);
+                            // return done(null, user);
                         });
                     }
 
@@ -47,7 +47,7 @@ function(req, token, refreshToken, profile, done) {
                     var newUser            = new User();
 
                     newUser.facebook.id    = profile.id;
-                    newUser.facebook.token = token;
+                    newUser.facebook.token = accessToken;
                     newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                     newUser.facebook.email = (profile.emails[0].value || '').toLowerCase();
 

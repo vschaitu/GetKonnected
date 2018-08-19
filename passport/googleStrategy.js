@@ -28,7 +28,7 @@ const strategy = new GoogleStrategy(
                         if (err)
                             return done(err);
 
-                        return done(null, user);
+                        // return done(null, user);
                     });
                 }
 
