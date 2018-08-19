@@ -17,8 +17,6 @@ function(req, token, refreshToken, profile, done) {
     // asynchronous
     process.nextTick(function() {
 
-        console.log("Facebook auth entry point!",profile)
-        console.log("Facebook auth entry point2!",req.user)
 
         // check if the user is already logged in
         if (!req.user) {
