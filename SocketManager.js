@@ -63,7 +63,9 @@ module.exports = function(socket){
 	})
 
 	socket.on(TYPING, ({chatId, isTyping})=>{
+		if (typeof sendTypingFromUser === "function" ) {
 		sendTypingFromUser(chatId, isTyping)
+		}
 	})
 
 	socket.on(PRIVATE_MESSAGE, ({reciever, sender, activeChat})=>{
