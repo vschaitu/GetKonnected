@@ -25,6 +25,7 @@ import {
 	PRIVATE_MESSAGE,
 	USER_CONNECTED,
 	NEW_CHAT_USER,
+	VERIFY_USER,
 	USER_DISCONNECTED
 } from '../../Events';
 
@@ -45,6 +46,10 @@ class Home extends React.Component {
 	componentDidMount() {
 		const { socket } = this.props.objAuth
 		this.initSocket(socket)
+	}
+
+	componentWillMount() {
+		this.reInitialize()
 	}
 
 	componentWillUnmount() {
@@ -76,6 +81,22 @@ class Home extends React.Component {
 			this.setState({ users: values(users) })
 		})
 		socket.on(NEW_CHAT_USER, this.addUserToChat)
+	}
+
+
+	reInitialize = ()=>{
+
+		const { socket } = this.props.objAuth
+		const { chatUser: user } = this.props.objAuth
+
+		if(user){
+			socket.emit(VERIFY_USER, user.name, user.displayName, ({isUser, user})=>{ 
+				if(isUser)
+					console.log("why im still here")
+				else 
+				this.socket.emit(USER_CONNECTED, user)
+			})				
+		}
 	}
 
 	addUserToChat = ({ chatId, newUser }) => {

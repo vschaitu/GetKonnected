@@ -86,10 +86,7 @@ const objAuth = {
   },
 };
 
-// let appAuth = new appAuth(objAuth);
-// const AuthComponent = appAuth.getComponent();
 
-// <AuthComponent /> 
 
 
 
