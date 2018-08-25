@@ -71,7 +71,7 @@ const createChat = ({messages = [], name, users = [], isCommunity = false} = {})
 * @return {string} users names concatenated by a '&' or "Empty Chat" if no users
 */
 const createChatNameFromUsers = (users, excludedUser = "")=>{
-	return users.filter(u => u !== excludedUser).join(' & ') || "Empty Chat"
+	return users.filter(u => u.name !== excludedUser).map( a => a.displayName).join(' & ') || "Empty Chat"
 }
 
 /*

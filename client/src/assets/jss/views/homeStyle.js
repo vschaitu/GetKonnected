@@ -13,6 +13,12 @@ const homeStyle = theme => ({
         color: "#FFFFFF"
 
     },
+
+    gridplace : {
+        ...container,
+        height:"90%",
+        width:"100%"
+    },
     ...headerLinksStyle(theme)
 });
 

@@ -45,19 +45,19 @@ class Signup extends Component {
     handleSubmit() {
 
         const { user } = this.state
-        console.log("sending post ot create user")
+
         //request to server to add a new username/password
         axios
             .post('/api/user/local', { user })
             .then(response => {
-                console.log(response)
+ 
                 if (!response.data.errors && !response.data.error) {
-                    console.log('successful signup')
+
                     this.setState({ //redirect to login page
                         redirectTo: '/login'
                     })
                 } else if (response.data.error) {
-                    console.log('username already taken')
+
                 }
                 else {
                     console.log('Invalid entry')
@@ -82,7 +82,7 @@ class Signup extends Component {
     render() {
         const { classes } = this.props
         const { username, email, password } = this.state.user
-        console.log(() => this.state.email.length > 5)
+
         if (this.state.redirectTo) {
             return <Redirect to={{ pathname: this.state.redirectTo }} />
         } else {

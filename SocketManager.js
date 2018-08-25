@@ -12,18 +12,18 @@ let communityChat = createChat({isCommunity:true})
 
 module.exports = function(socket){
 	
-	// console.log('\x1bc'); //clears console
+	
 	console.log("User Connected on: " + new Date().toLocaleString());
 	let sendMessageToChatFromUser;
 	
 	let sendTypingFromUser;
 	
 	//Verify Username
-	socket.on(VERIFY_USER, (nickname, callback)=>{
-		if(isUser(connectedUsers, nickname)){
+	socket.on(VERIFY_USER, (name, displayName, callback)=>{
+		if(isUser(connectedUsers, name)){
 			callback({ isUser:true, user:null })
 		}else{
-			callback({ isUser:false, user:createUser({name:nickname, socketId:socket.id})})
+			callback({ isUser:false, user:createUser({name:name, displayName:displayName, socketId:socket.id})})
 		}
 	})
 
@@ -32,12 +32,10 @@ module.exports = function(socket){
 		user.socketId = socket.id
 		connectedUsers = addUser(connectedUsers, user)
 		socket.user = user
-
-		sendMessageToChatFromUser = sendMessageToChat(user.name)
-		sendTypingFromUser = sendTypingToChat(user.name)
+		sendMessageToChatFromUser = sendMessageToChat(user.displayName)
+		sendTypingFromUser = sendTypingToChat(user)
 
 		io.emit(USER_CONNECTED, connectedUsers)
-		console.log(connectedUsers);
 
 	})
 	
@@ -46,7 +44,6 @@ module.exports = function(socket){
 		if("user" in socket){
 			connectedUsers = removeUser(connectedUsers, socket.user.name)
 			io.emit(USER_DISCONNECTED, connectedUsers)
-			console.log("Disconnect", connectedUsers);
 		}
 	})
 
@@ -54,7 +51,6 @@ module.exports = function(socket){
 	socket.on(LOGOUT, ()=>{
 		connectedUsers = removeUser(connectedUsers, socket.user.name)
 		io.emit(USER_DISCONNECTED, connectedUsers)
-		console.log("Disconnect", connectedUsers);
 	})
 
 	//Get Community Chat
@@ -71,30 +67,36 @@ module.exports = function(socket){
 	})
 
 	socket.on(PRIVATE_MESSAGE, ({reciever, sender, activeChat})=>{
-		if(reciever in connectedUsers){
-			const recieverSocket = connectedUsers[reciever].socketId
+		console.log("sender", sender)
+		console.log("reciver", reciever)
+		console.log("activechat", activeChat)
+		console.log("connectedUsers", connectedUsers)
+		if(reciever.name in connectedUsers){
+			const recieverSocket = connectedUsers[reciever.name].socketId
 			if(activeChat === null || activeChat.id === communityChat.id){
-				const newChat = createChat({ name:`${reciever}&${sender}`, users:[reciever, sender] })
+				const newChat = createChat({ name:"", users:[reciever, sender] })
 				socket.to(recieverSocket).emit(PRIVATE_MESSAGE, newChat)
 				socket.emit(PRIVATE_MESSAGE, newChat)
 			}else{
 				//Send New User Name to other users to update chat
-				if(!(reciever in activeChat.users)){
-					activeChat.users
+				let currentUsers = activeChat.users.map( a => a.name)
+				if(currentUsers.indexOf(reciever.name) === -1)	{
+					console.log("mymap")
+					console.log(currentUsers.filter( user => user in connectedUsers ).map(user => connectedUsers[user]))
+					currentUsers
 					.filter( user => user in connectedUsers )
 					.map( user => connectedUsers[user] )
 					.map( user => {
-						console.log(user)
 						socket.to(user.socketId)
-						.emit(NEW_CHAT_USER, { chatId:activeChat.id, newUser: reciever })
+						.emit(NEW_CHAT_USER, { chatId:activeChat.id, newUser: { name : reciever.name, displayName: reciever.displayName} })
 					})
-					socket.emit(NEW_CHAT_USER, { chatId:activeChat.id, newUser: reciever })									
+					socket.emit(NEW_CHAT_USER, { chatId:activeChat.id, newUser: { name : reciever.name, displayName: reciever.displayName} })	
+					activeChat.users.push(reciever)
+					socket.to(recieverSocket).emit(PRIVATE_MESSAGE, activeChat)								
 				}
-				socket.to(recieverSocket).emit(PRIVATE_MESSAGE, activeChat)
 			}
 		}
 	})
-
 }
 /*
 * Returns a function that will take a chat id and a boolean isTyping

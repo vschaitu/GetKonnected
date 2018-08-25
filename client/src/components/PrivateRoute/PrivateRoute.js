@@ -8,8 +8,6 @@ import {
 } from "react-router-dom";
 
 const PrivateRoute = ({ component: Component, objAuth, ...rest }) => {
-  console.log("im private")
-  console.log(objAuth)
 
   return (<Route
     {...rest}

@@ -4,7 +4,6 @@ const User = require('../../database/models/user')
 const passport = require('../../passport')
 
 router.post('/local', (req, res) => {
-    console.log('local user signup', req.body.user);
 
     const { email, password, username } = req.body.user
     // ADD VALIDATION
@@ -23,14 +22,11 @@ router.post('/local', (req, res) => {
             newUser.local.password = password
             newUser.local.username = username
 
-            console.log(newUser)
-
             newUser.save((err, savedUser) => {
                 if (err) {
                     console.log(err)
                     return res.json(err)
                 }
-                console.log(savedUser)
                 res.json(savedUser)
             })
         }
@@ -40,13 +36,10 @@ router.post('/local', (req, res) => {
 router.post(
     '/local/login',
     function (req, res, next) {
-        console.log('req.body:');
-        console.log(req.body)
         next()
     },
     passport.authenticate('local'),
     (req, res) => {
-        console.log('logged in', req.user);
         const userInfo = {
             user: req.user
         };
@@ -55,8 +48,7 @@ router.post(
 )
 
 router.get('/', (req, res, next) => {
-    console.log('===== user!!======')
-    console.log(req.user)
+
     if (req.user) {
         res.json({ user: req.user })
     } else {
@@ -67,7 +59,6 @@ router.get('/', (req, res, next) => {
 router.post('/logout', (req, res) => {
     if (req.user) {
         req.logout()
-        console.log("loggin user out on Server")
         res.send({ msg: 'logging out' })
 
     } else {
@@ -94,7 +85,7 @@ router.get('/auth/google/callback',
 
     passport.authenticate('google'), (req, res) => {
 
-        return res.redirect('/');
+        return res.redirect('http://localhost:3000/');
 
     });
 

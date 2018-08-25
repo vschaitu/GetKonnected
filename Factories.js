@@ -8,10 +8,11 @@ const uuidv4 = require('uuid/v4')
 *	@param {object} 
 *		name {string}
 */
-const createUser = ({name = "", socketId = null } = {})=>(
+const createUser = ({name = "", displayName="", socketId = null } = {})=>(
 	{
 		id:uuidv4(),
 		name,
+		displayName,
 		socketId
 		
 	}
@@ -33,7 +34,8 @@ const createMessage = ({message = "", sender = ""} = { })=>(
 			id:uuidv4(),
 			time:getTime(new Date(Date.now())),
 			message,
-			sender	
+			sender,
+			initials:getInitials(sender)	
 		}
 
 	)
@@ -71,7 +73,7 @@ const createChat = ({messages = [], name, users = [], isCommunity = false} = {})
 * @return {string} users names concatenated by a '&' or "Empty Chat" if no users
 */
 const createChatNameFromUsers = (users, excludedUser = "")=>{
-	return users.filter(u => u !== excludedUser).join(' & ') || "Empty Chat"
+	return users.filter(u => u.name !== excludedUser).map( a => a.displayName).join(' & ') || "Empty Chat"
 }
 
 /*
@@ -80,6 +82,10 @@ const createChatNameFromUsers = (users, excludedUser = "")=>{
 */
 const getTime = (date)=>{
 	return `${date.getHours()}:${("0"+date.getMinutes()).slice(-2)}`
+}
+
+const getInitials = (name) => {
+	return name.split(" ").map((n,i,a)=> i === 0 || i+1 === a.length ? n[0] : null).join("")
 }
 
 module.exports = {

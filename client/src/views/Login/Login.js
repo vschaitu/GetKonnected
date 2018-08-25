@@ -61,11 +61,9 @@ class Login extends React.Component {
 
             if (!isUserAlreadyinChat) {
                 if (res.user) {
-                    console.log("Yay user", res.user)
                     this.setState({ redirectToReferrer: true })
 
                 } else {
-                    console.log("no-user")
                     setTimeout(
                         function () {
                             this.setState({ cardAnimaton: "" });
@@ -74,7 +72,6 @@ class Login extends React.Component {
                     );
                 }
             } else {
-                console.log("user already have got session")
                 this.setState({
                     authValid: false,
                     errorMessage: "User already have active session! Can't login!"
@@ -93,23 +90,19 @@ class Login extends React.Component {
         const { email, password } = this.state
 
         this.setState({ authValid: null })
-        console.log("logging in")
         axios
             .post('/api/user/local/login', {
                 'email': email,
                 'password': password
             })
             .then(response => {
-                console.log('login response: ')
-                console.log(response)
+
                 if (response.status === 200) {
-                    console.log("calling autheticate again after post")
                     this.validateUser()
                 }
             })
             .catch(error => {
-                console.log('login error: ')
-                console.log(error.response);
+
                 this.setState({
                     authValid: false,
                     errorMessage: "Invalid Credentials!"
