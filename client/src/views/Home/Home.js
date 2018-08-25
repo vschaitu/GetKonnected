@@ -164,7 +164,6 @@ class Home extends React.Component {
 	*	Updates the typing of chat with id passed in.
 	*	@param chatId {number}
     */
-
 	updateTypingInChat = (chatId) => {
 		return ({ isTyping, user }) => {
 			if (this.props.objAuth.chatUser) {
