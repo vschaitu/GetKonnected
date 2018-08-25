@@ -66,7 +66,7 @@ class SecSidebar extends React.Component {
       updatedList = this.props.users
     } else {
       updatedList = updatedList.filter(function (item) {
-        return item.name.toLowerCase().search(value.toLowerCase()) !== -1;
+        return item.displayName.toLowerCase().search(value.toLowerCase()) !== -1;
       });
     }
     this.setState({
