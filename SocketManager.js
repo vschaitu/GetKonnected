@@ -13,7 +13,7 @@ let communityChat = createChat({isCommunity:true})
 module.exports = function(socket){
 	
 	
-	console.log("User Connected on: " + new Date().toLocaleString());
+	console.log("User Connected on: " + new Date().toLocaleString() + "socketid" + socket.id);
 	let sendMessageToChatFromUser;
 	
 	let sendTypingFromUser;
@@ -29,6 +29,7 @@ module.exports = function(socket){
 
 	//User Connects with username
 	socket.on(USER_CONNECTED, (user)=>{
+		console.log("user connected socket" + socket.id )
 		user.socketId = socket.id
 		connectedUsers = addUser(connectedUsers, user)
 		socket.user = user
@@ -41,7 +42,9 @@ module.exports = function(socket){
 	
 	//User disconnects
 	socket.on('disconnect', ()=>{
+		console.log("user disconnected" + new Date().toLocaleString() )
 		if("user" in socket){
+			console.log("user disconnected socket" + socket.id )
 			connectedUsers = removeUser(connectedUsers, socket.user.name)
 			io.emit(USER_DISCONNECTED, connectedUsers)
 		}
