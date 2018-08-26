@@ -92,7 +92,7 @@ class Home extends React.Component {
 				if(isUser)
 					console.log("why im still here")
 				else 
-				this.socket.emit(USER_CONNECTED, user)
+				 	socket.emit(USER_CONNECTED, user)
 			})				
 		}
 	}
