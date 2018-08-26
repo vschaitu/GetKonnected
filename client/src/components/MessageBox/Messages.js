@@ -15,7 +15,6 @@ class Messages extends Component {
 
     scrollDown() {
         const { container } = this.refs
-        console.log(container)
         container.scrollTop = container.scrollHeight
         
     }
@@ -35,7 +34,7 @@ class Messages extends Component {
 
         return (
             <React.Fragment>
-                <Card  style={{ height: "79%", marginBottom: "0px" }} className={classes.textCenter}>
+                <Card  style={{ height: "79%", marginBottom: "0px", overflowY: "auto" }} className={classes.textCenter}>
                     <CardHeader color="info" className={classes.cardHeader}>
                         <Typography variant="subheading" color="inherit">
                             {name}

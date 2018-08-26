@@ -51,6 +51,7 @@ class Home extends React.Component {
 	componentWillMount() {
 		this.reInitialize()
 	}
+	
 
 	componentWillUnmount() {
 		const { socket } = this.props.objAuth
@@ -68,7 +69,7 @@ class Home extends React.Component {
 		// })
 
 		socket.on('connect', () => {
-			console.log(" im reconnecting???")
+			console.log(" i connected now???")
 		})
 
 		socket.on(USER_CONNECTED, (users) => {
@@ -76,11 +77,13 @@ class Home extends React.Component {
 		})
 		socket.on(USER_DISCONNECTED, (users) => {
 			const removedUsers = differenceBy(this.state.users, values(users), 'id')
-			console.log("removed", removedUsers)
 			this.removeUsersFromChat(removedUsers.map(a => a.name))
 			this.setState({ users: values(users) })
 		})
 		socket.on(NEW_CHAT_USER, this.addUserToChat)
+		socket.on('reconnect', () => {
+			console.log("this is reconnect", socket)
+		})
 	}
 
 
@@ -239,7 +242,7 @@ class Home extends React.Component {
 		const { objAuth } = this.props
 		const { chatUser: user } = this.props.objAuth
 		const { chats, activeChat, users } = this.state
-		
+		console.log("state", this.state)
 		return (
 			<React.Fragment>
 
