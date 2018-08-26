@@ -48,11 +48,6 @@ class Home extends React.Component {
 		this.initSocket(socket)
 	}
 
-	componentWillMount() {
-		this.reInitialize()
-	}
-	
-
 	componentWillUnmount() {
 		const { socket } = this.props.objAuth
 		socket.off(PRIVATE_MESSAGE)
@@ -83,13 +78,13 @@ class Home extends React.Component {
 		socket.on(NEW_CHAT_USER, this.addUserToChat)
 		socket.on('reconnect', () => {
 			console.log("this is reconnect", socket)
+			this.reInitialize(socket)
 		})
 	}
 
 
-	reInitialize = ()=>{
-
-		const { socket } = this.props.objAuth
+	reInitialize = (socket)=>{
+		console.log("props", this.props)
 		const { chatUser: user } = this.props.objAuth
 
 		if(user){
