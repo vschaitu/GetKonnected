@@ -69,7 +69,7 @@ class Home extends React.Component {
 		// })
 
 		socket.on('connect', () => {
-			console.log(" i connected now???")
+			console.log(" im connected now???")
 		})
 
 		socket.on(USER_CONNECTED, (users) => {
