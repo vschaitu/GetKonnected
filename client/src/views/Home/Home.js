@@ -71,7 +71,7 @@ class Home extends React.Component {
 			this.setState({ users: values(users) })
 		})
 		socket.on(USER_DISCONNECTED, (users) => {
-			const removedUsers = differenceBy(this.state.users, values(users), 'id')
+			const removedUsers = differenceBy(this.state.users, values(users), 'name')
 			this.removeUsersFromChat(removedUsers.map(a => a.name))
 			this.setState({ users: values(users) })
 		})
@@ -238,6 +238,7 @@ class Home extends React.Component {
 		const { chatUser: user } = this.props.objAuth
 		const { chats, activeChat, users } = this.state
 		console.log("state", this.state)
+		console.log("props", this.props)
 		return (
 			<React.Fragment>
 
