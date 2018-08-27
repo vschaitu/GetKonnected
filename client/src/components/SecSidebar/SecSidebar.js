@@ -159,7 +159,7 @@ class SecSidebar extends React.Component {
                           tabButton: "Users",
                           tabIcon: Face,
                           tabContent: (
-                            differenceBy(users, [user], 'id').map((otherUser) => {
+                            differenceBy(users, [user], 'name').map((otherUser) => {
                               return (
                                 <SecSidebarOption
                                   key={otherUser.id}

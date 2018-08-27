@@ -62,7 +62,7 @@ module.exports = function(socket){
 
 	//Get Community Chat
 	socket.on(COMMUNITY_CHAT, (callback)=>{
-		callback(communityChat)
+		callback(communityChat,true)
 	})
 
 	socket.on(MESSAGE_SENT, ({chatId, message})=>{
@@ -82,8 +82,8 @@ module.exports = function(socket){
 			const recieverSocket = connectedUsers[reciever.name].socketId
 			if(activeChat === null || activeChat.id === communityChat.id){
 				const newChat = createChat({ name:"", users:[reciever, sender] })
-				socket.to(recieverSocket).emit(PRIVATE_MESSAGE, newChat)
-				socket.emit(PRIVATE_MESSAGE, newChat)
+				socket.to(recieverSocket).emit(PRIVATE_MESSAGE, newChat,false)
+				socket.emit(PRIVATE_MESSAGE, newChat,true)
 			}else{
 				//Send New User Name to other users to update chat
 				let currentUsers = activeChat.users.map( a => a.name)

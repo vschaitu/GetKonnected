@@ -130,9 +130,9 @@ class Home extends React.Component {
 	* 	@param chat {Chat}
     */
 
-	resetChat = (chat) => {
+	resetChat = (chat,setActive) => {
 
-		return this.addChat(chat, true)
+		return this.addChat(chat, setActive, true)
 	}
 
 	/*
@@ -144,12 +144,12 @@ class Home extends React.Component {
 	*	@param reset {boolean} if true will set the chat as the only chat.
     */
 
-	addChat = (chat, reset = false) => {
+	addChat = (chat, setActive = false, reset = false) => {
 		const { socket } = this.props.objAuth
 		const { chats } = this.state
 	
 		const newChats = reset ? [chat] : [...chats, chat]
-		this.setState({ chats: newChats, activeChat: reset ? chat : this.state.activeChat })
+		this.setState({ chats: newChats, activeChat: setActive ? chat : this.state.activeChat })
 
 		const messageEvent = `${MESSAGE_RECIEVED}-${chat.id}`
 
